@@ -1,0 +1,33 @@
+name: CI
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci:
+    env:
+      PYTHON_VERSION: 3.9
+      POETRY_VERSION: 1.1.6
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2.1.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          pytest
