@@ -1,0 +1,35 @@
+pull_request_rules:
+  - name: Automatic approve
+    conditions:
+      - check-success=ci
+      - check-success=check-commit-messages
+      - base=main
+      - label!=WIP
+      - label=review
+      - -body~=\[ \]
+      - -draft
+      - -conflict
+      - author=ederst
+    actions:
+      review:
+        type: APPROVE
+        message: lgtm
+      label:
+        remove:
+          - review
+        add:
+          - merge
+
+  - name: Automatic merge
+    conditions:
+      - "#approved-reviews-by>=1"
+      - check-success=ci
+      - check-success=check-commit-messages
+      - base=main
+      - label!=WIP
+      - label=merge
+      - -draft
+      - -conflict
+    actions:
+      merge:
+        method: rebase
