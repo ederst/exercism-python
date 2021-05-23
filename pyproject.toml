@@ -8,6 +8,7 @@ authors = ["sprietl"]
 python = "^3.9"
 PyYAML = "^5.4.1"
 docstring-parser = "^0.7.3"
+comment-parser = "^1.2.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
