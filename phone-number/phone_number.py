@@ -43,20 +43,20 @@ class PhoneNumber:
             raise ValueError("Provided an invalid number")
 
     @property
-    def area_code(self):
+    def area_code(self) -> str:
         return self.__area_code
 
     @property
-    def exchange_code(self):
+    def exchange_code(self) -> str:
         return self.__exchange_code
 
     @property
-    def subscriber_number(self):
+    def subscriber_number(self) -> str:
         return self.__subscriber_number
 
     @property
-    def number(self):
+    def number(self) -> str:
         return f"{self.area_code}{self.exchange_code}{self.subscriber_number}"
 
-    def pretty(self):
+    def pretty(self) -> str:
         return f"({self.area_code})-{self.exchange_code}-{self.subscriber_number}"
