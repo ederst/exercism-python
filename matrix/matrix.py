@@ -5,7 +5,7 @@ class Matrix:
     __matrix: List[List[int]]
 
     def __init__(self, matrix_string: str):
-        self.__matrix = [list(map(int, row.split(' '))) for row in matrix_string.splitlines()]
+        self.__matrix = [[int(x) for x in row.split()] for row in matrix_string.splitlines()]
 
     def row(self, index: int) -> List[int]:
         return self.__matrix[index - 1]
