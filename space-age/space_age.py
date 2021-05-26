@@ -3,8 +3,8 @@ class SpaceAge:
     def __init__(self, seconds: float):
         self.seconds = seconds
 
-    def _space_age(self, factor: float = 1, ndigits: int = 2) -> float:
-        return round(self.seconds / 31557600.0 / factor, ndigits)
+    def _space_age(self, ratio: float = 1.0, ndigits: int = 2) -> float:
+        return round(self.seconds / 31557600.0 / ratio, ndigits)
 
     def on_mercury(self) -> float:
         return self._space_age(0.2408467)
