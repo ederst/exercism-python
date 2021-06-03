@@ -1,4 +1,18 @@
 from threading import Lock
+from functools import wraps
+
+
+# With own locking decorator:
+#  * https://blog.teclado.com/decorators-in-python/
+#  * https://www.digitalocean.com/community/tutorials/how-to-use-args-and-kwargs-in-python-3
+def with_lock(lock):
+    def with_lock_decorator(func):
+        @wraps(func)
+        def with_lock_func(self, *args, **kwargs):
+            with getattr(self, lock):
+                return func(self, *args, **kwargs)
+        return with_lock_func
+    return with_lock_decorator
 
 
 class State(object):
@@ -34,15 +48,13 @@ class Opened(State):
         if amount <= 0:
             raise ValueError("Invalid amount.")
 
-        with account._lock:
-            account._balance += amount
+        account._balance += amount
 
     def withdraw(self, account, amount):
         if not 0 < amount <= account._balance:
             raise ValueError("invalid amount.")
 
-        with account._lock:
-            account._balance -= amount
+        account._balance -= amount
 
 
 class Closed(State):
@@ -79,9 +91,11 @@ class BankAccount(object):
     def open(self):
         self._state = self._state.open()
 
+    @with_lock('_lock')
     def deposit(self, amount):
         self._state.deposit(self, amount)
 
+    @with_lock('_lock')
     def withdraw(self, amount):
         self._state.withdraw(self, amount)
 
