@@ -1,89 +1,57 @@
 from wrapt import synchronized
+from enum import Enum
+from functools import wraps
 
 
-class State(object):
-
-    def get_balance(self, account) -> int:
-        raise NotImplementedError
-
-    def close(self):
-        raise NotImplementedError
-
-    def open(self):
-        raise NotImplementedError
-
-    def deposit(self, account, amount):
-        raise NotImplementedError
-
-    def withdraw(self, account, amount):
-        raise NotImplementedError
+class State(Enum):
+    CLOSED = 0
+    OPENED = 1
 
 
-class Opened(State):
-
-    def get_balance(self, account) -> int:
-        return account._balance
-
-    def close(self) -> State:
-        return Closed()
-
-    def open(self):
-        raise ValueError("Account is open.")
-
-    def deposit(self, account, amount):
-        if amount <= 0:
-            raise ValueError("Invalid amount.")
-
-        account._balance += amount
-
-    def withdraw(self, account, amount):
-        if not 0 < amount <= account._balance:
-            raise ValueError("invalid amount.")
-
-        account._balance -= amount
-
-
-class Closed(State):
-
-    def _raise_error(self):
-        raise ValueError("Account is closed.")
-
-    def get_balance(self, account):
-        self._raise_error()
-
-    def close(self) -> State:
-        self._raise_error()
-
-    def open(self) -> State:
-        return Opened()
-
-    def deposit(self, account, amount):
-        self._raise_error()
-
-    def withdraw(self, account, amount):
-        self._raise_error()
+def require_state(state: State):
+    def require_state_decorator(func):
+        @wraps(func)
+        def require_state_func(self, *args, **kwargs):
+            if not state == self._state:
+                raise ValueError(f"Bank account in state {self._state}, but {state} is required.")
+            return func(self, *args, **kwargs)
+        return require_state_func
+    return require_state_decorator
 
 
 class BankAccount(object):
 
     def __init__(self):
-        self._state = Closed()
+        self._state = State.CLOSED
         self._balance = 0
 
+    @require_state(State.OPENED)
     def get_balance(self) -> int:
-        return self._state.get_balance(self)
+        return self._balance
 
+    @synchronized
+    @require_state(State.CLOSED)
     def open(self):
-        self._state = self._state.open()
+        self._state = State.OPENED
 
     @synchronized
+    @require_state(State.OPENED)
     def deposit(self, amount):
-        self._state.deposit(self, amount)
+        if amount <= 0:
+            raise ValueError("Can only deposit a postitive amount.")
+
+        self._balance += amount
 
     @synchronized
+    @require_state(State.OPENED)
     def withdraw(self, amount):
-        self._state.withdraw(self, amount)
+        if not 0 < amount <= self._balance:
+            raise ValueError(
+                "Can only withdraw a positive amount or an amount less or equal than the current balance.")
 
+        self._balance -= amount
+
+    @synchronized
+    @require_state(State.OPENED)
     def close(self):
-        self._state = self._state.close()
-        self._balance = 0
+        self.__init__()
