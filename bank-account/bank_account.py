@@ -1,18 +1,4 @@
-from threading import Lock
-from functools import wraps
-
-
-# With own locking decorator:
-#  * https://blog.teclado.com/decorators-in-python/
-#  * https://www.digitalocean.com/community/tutorials/how-to-use-args-and-kwargs-in-python-3
-def with_lock(lock):
-    def with_lock_decorator(func):
-        @wraps(func)
-        def with_lock_func(self, *args, **kwargs):
-            with getattr(self, lock):
-                return func(self, *args, **kwargs)
-        return with_lock_func
-    return with_lock_decorator
+from wrapt import synchronized
 
 
 class State(object):
@@ -81,7 +67,6 @@ class Closed(State):
 class BankAccount(object):
 
     def __init__(self):
-        self._lock = Lock()
         self._state = Closed()
         self._balance = 0
 
@@ -91,11 +76,11 @@ class BankAccount(object):
     def open(self):
         self._state = self._state.open()
 
-    @with_lock('_lock')
+    @synchronized
     def deposit(self, amount):
         self._state.deposit(self, amount)
 
-    @with_lock('_lock')
+    @synchronized
     def withdraw(self, amount):
         self._state.withdraw(self, amount)
 
