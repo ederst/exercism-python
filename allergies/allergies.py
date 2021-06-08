@@ -67,4 +67,11 @@ class Allergies:
     def lst(self) -> List[str]:
         # return self._lst_with_zip()
         # return self._lst_bitops()
-        return self._lst_bitops_improved()
+        # return self._lst_bitops_improved()
+
+        # I actually did not want to submit that, but this is based on:
+        #  * https://exercism.io/tracks/python/exercises/allergies/solutions/e52f7368907e4dca81ed5e9c44b6fc76
+        # A solution which i liked.
+        # return [allergen for i, allergen in enumerate(self._allergens) if self._score & 2**i]
+
+        return [allergen for i, allergen in enumerate(self._allergens) if self._score & 1 << i]
