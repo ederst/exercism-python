@@ -32,9 +32,6 @@ gifts: List[str] = [
     "twelve Drummers Drumming,",
 ]
 
-# build all the verses
-verses = list(map(lambda o: [o, gifts[ordinals.index(o):0:-1]], ordinals))
-
 
 def require_valid_verse_range(func):
     def require_valid_verse_range_func(start_verse: int, end_verse: int):
@@ -52,4 +49,7 @@ def require_valid_verse_range(func):
 
 @require_valid_verse_range
 def recite(start_verse: int, end_verse: int) -> List[str]:
-    return list(map(lambda v: f"On the {v[0]} day of Christmas my true love gave to me: {' '.join(v[1])}.", verses[start_verse:end_verse+1]))
+    # build only the necessary verses
+    verses = list(map(lambda o: [o, gifts[ordinals.index(o):0:-1]], ordinals[start_verse:end_verse+1]))
+
+    return list(map(lambda v: f"On the {v[0]} day of Christmas my true love gave to me: {' '.join(v[1])}.", verses))
