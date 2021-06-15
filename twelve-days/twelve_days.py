@@ -49,7 +49,11 @@ def require_valid_verse_range(func):
 
 @require_valid_verse_range
 def recite(start_verse: int, end_verse: int) -> List[str]:
-    # build only the necessary verses
-    verses = list(map(lambda o: [o, gifts[ordinals.index(o):0:-1]], ordinals[start_verse:end_verse+1]))
-
-    return list(map(lambda v: f"On the {v[0]} day of Christmas my true love gave to me: {' '.join(v[1])}.", verses))
+    # Note(sprietl): See commit history for different solutions
+    return list(
+        map(
+            lambda o:
+                f"On the {o} day of Christmas my true love gave to me: {' '.join(gifts[ordinals.index(o):0:-1])}.",
+            ordinals[start_verse:end_verse + 1],
+        )
+    )
