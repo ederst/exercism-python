@@ -1,6 +1,7 @@
 from typing import List
 
 ordinals: List[str] = [
+    "nought",
     "first",
     "second",
     "third",
@@ -16,6 +17,7 @@ ordinals: List[str] = [
 ]
 
 gifts: List[str] = [
+    "",
     "a Partridge in a Pear Tree",
     "two Turtle Doves, and",
     "three French Hens,",
@@ -29,6 +31,8 @@ gifts: List[str] = [
     "eleven Pipers Piping,",
     "twelve Drummers Drumming,",
 ]
+
+verses = list(zip(ordinals, gifts))
 
 
 def require_valid_verse_range(func):
@@ -47,11 +51,7 @@ def require_valid_verse_range(func):
 
 @require_valid_verse_range
 def recite(start_verse: int, end_verse: int) -> List[str]:
-
-    # adjust start_verse to "real" beginning of lists in python, which is 0
-    start_verse -= 1
-
     return [
-        f"On the {ordinal} day of Christmas my true love gave to me: {' '.join(gifts[i+start_verse::-1])}."
-        for i, ordinal in enumerate(ordinals[start_verse:end_verse])
+        f"On the {ordinal[0]} day of Christmas my true love gave to me: {' '.join(gift for _, gift in verses[i+start_verse:0:-1])}."
+        for i, ordinal in enumerate(verses[start_verse:end_verse+1])
     ]
