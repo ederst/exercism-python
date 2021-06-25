@@ -1,5 +1,3 @@
-from itertools import groupby
-
 scores = {
     "A": 1,
     "E": 1,
