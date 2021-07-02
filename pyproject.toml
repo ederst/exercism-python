@@ -6,6 +6,8 @@ authors = ["sprietl"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pulumi = "^3.6.0"
+typing-extensions = "^3.10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.4"
