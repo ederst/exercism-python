@@ -7,14 +7,18 @@ from attr import dataclass
 
 
 @dataclass
-class TrackArgs(TypedDict):
+class TrackArgs:
     name: pulumi.Input[str]
     workspace: pulumi.Input[str]
+
+    @staticmethod
+    def from_inputs(inputs):
+        return TrackArgs(name=inputs['name'], workspace=['workspace'])
 
 
 class Track(pulumi.ComponentResource):
     def __init__(self, name: str, track_args: TrackArgs, opts: pulumi.ResourceOptions = None):
-        super().__init__('exercism:exercism:ExercismTrack', name=name, props={'track_args': track_args}, opts=opts)
+        super().__init__('exercism:exercism:ExercismTrack', name=name, props={'track_args': {**vars(track_args)}}, opts=opts)
 
         track_opts = pulumi.ResourceOptions(parent=self)
 

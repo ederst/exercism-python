@@ -130,3 +130,8 @@ dmypy.json
 
 # Exercism
 *.exercism
+
+# Pulumi
+config-pass
+.pulumi
+*.pyc

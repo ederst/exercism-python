@@ -1,0 +1,6 @@
+name: exercism-cd
+runtime:
+  name: python
+  options:
+    virtualenv: ../.venv
+description: A program providing CD for Exercism
