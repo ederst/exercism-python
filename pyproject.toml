@@ -3,16 +3,62 @@ name = "exercism-python"
 version = "0.1.0"
 description = ""
 authors = ["sprietl"]
+# package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.13"
 
-[tool.poetry.dev-dependencies]
-pytest = "^6.2.4"
-pylint = "^2.8.2"
-pycodestyle = "^2.7.0"
-black = "^21.5b2"
+[tool.poetry.group.dev.dependencies]
+pyright = "^1.1.389"
+pytest = "^8.3.4"
+ruff = "^0.8.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+exclude = [".venv"]
+
+[tool.ruff.lint]
+extend-select = [
+    "A",      # flake8-builtins
+    "C4",     # flake8-comprehensions
+    "ERA",    # eradicate (commented out code)
+    "G",      # flake8-logging-format
+    "I",      # isort
+    "ISC",    # flake8-implicit-string-concat
+    "PL",     # Pylint
+    "RET",    # flake8-return
+    "RUF100", # unused noqa
+    "SLF",    # flake8-self
+]
+ignore = [
+    "ISC001",  # single line string concat  # disabled per hint from ruff reg. conflict with formatter
+    "PLR0912", # too many branches
+    "PLR0913", # too many arguments
+    "PLR0915", # too many statements
+    "PLR2004", # magix value used in comparison  # we do this if value is just used once
+    "PLR1711", # useless return  # we return None explicitly
+]
+
+[tool.ruff.lint.isort]
+lines-between-types = 1
+
+[tool.ruff.lint.per-file-ignores]
+"*_test.py" = [
+    "SLF001", # allow access to private members in tests
+]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.pyright]
+useLibraryCodeForTypes = true
+include = ["src/exercism_python"]
+exclude = ["**/node_modules", "**/__pycache__"]
+reportUnnecessaryTypeIgnoreComment = true
+venv = ".venv"
+venvPath = "."

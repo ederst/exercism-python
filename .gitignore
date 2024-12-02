@@ -130,3 +130,5 @@ dmypy.json
 
 # Exercism
 *.exercism
+.exercism-config/
+.exercism-token
