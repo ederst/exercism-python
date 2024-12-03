@@ -6,51 +6,51 @@ Overview of exchanging currency when travelling: https://www.compareremit.com/mo
 """
 
 
-def exchange_money(budget, exchange_rate):
-    """
+def exchange_money(budget: float, exchange_rate: float) -> float:
+    """Calculate the value of the currency to exchange.
 
     :param budget: float - amount of money you are planning to exchange.
     :param exchange_rate: float - unit value of the foreign currency.
     :return: float - exchanged value of the foreign currency you can receive.
     """
 
-    pass
+    return budget / exchange_rate
 
 
-def get_change(budget, exchanging_value):
-    """
+def get_change(budget: float, exchanging_value: float) -> float:
+    """Calculate the amount of money that is left from the budget.
 
     :param budget: float - amount of money you own.
     :param exchanging_value: float - amount of your money you want to exchange now.
     :return: float - amount left of your starting currency after exchanging.
     """
 
-    pass
+    return budget - exchanging_value
 
 
-def get_value_of_bills(denomination, number_of_bills):
-    """
+def get_value_of_bills(denomination: int, number_of_bills: int) -> int:
+    """Calculate the total value of the bills.
 
     :param denomination: int - the value of a bill.
     :param number_of_bills: int - total number of bills.
     :return: int - calculated value of the bills.
     """
 
-    pass
+    return denomination * number_of_bills
 
 
-def get_number_of_bills(amount, denomination):
-    """
+def get_number_of_bills(amount: float, denomination: int) -> int:
+    """Calculate the number of currency bills that can be received.
 
     :param amount: float - the total starting value.
     :param denomination: int - the value of a single bill.
     :return: int - number of bills that can be obtained from the amount.
     """
 
-    pass
+    return int(amount / denomination)
 
 
-def get_leftover_of_bills(amount, denomination):
+def get_leftover_of_bills(amount: float, denomination: int) -> float:
     """
 
     :param amount: float - the total starting value.
@@ -58,11 +58,11 @@ def get_leftover_of_bills(amount, denomination):
     :return: float - the amount that is "leftover", given the current denomination.
     """
 
-    pass
+    return amount % denomination
 
 
-def exchangeable_value(budget, exchange_rate, spread, denomination):
-    """
+def exchangeable_value(budget: float, exchange_rate: float, spread: int, denomination: int) -> int:
+    """Calculate the maximum value of the new currency by adding a spread to the exchange rate.
 
     :param budget: float - the amount of your money you are planning to exchange.
     :param exchange_rate: float - the unit value of the foreign currency.
@@ -70,5 +70,8 @@ def exchangeable_value(budget, exchange_rate, spread, denomination):
     :param denomination: int - the value of a single bill.
     :return: int - maximum value you can get.
     """
+    exchange_fee = exchange_rate * spread / 100
+    amount = exchange_money(budget, exchange_rate + exchange_fee)
+    number_of_bills = get_number_of_bills(amount, denomination)
 
-    pass
+    return get_value_of_bills(denomination, number_of_bills)
