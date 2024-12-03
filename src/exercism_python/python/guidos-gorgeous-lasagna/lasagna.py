@@ -8,7 +8,10 @@ of a module and its functions and/or classes.
 """
 
 EXPECTED_BAKE_TIME = 40
+""" Specifies the expected bake time (in minutes) for one lasagna. """
+
 LAYER_PREPERATION_TIME = 2
+""" Specifies the time (in minutes) it takes to prepare one layer of lasagna. """
 
 
 def bake_time_remaining(elapsed_bake_time: int) -> int:
